@@ -414,7 +414,13 @@ def load_css(css_path):
     st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
 
 # 加载基础样式表
-load_css('static/style.css')
+import os
+css_path = os.path.join(os.path.dirname(__file__), 'static/style.css')
+try:
+    load_css(css_path)
+except FileNotFoundError:
+    # 如果CSS文件不存在，继续使用内置样式
+    pass
 
 # 保留原有的标签样式兼容
 st.markdown("""
