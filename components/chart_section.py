@@ -3,6 +3,7 @@
 
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def render_chart_section(user_data, df):
     """渲染投诉指标对比柱状图"""
@@ -19,16 +20,39 @@ def render_chart_section(user_data, df):
         "涉及流水号数": user_data.get("涉及流水号数", 0)
     }
 
-    # 创建DataFrame用于图表
-    chart_data = pd.DataFrame({
-        "指标": list(metrics.keys()),
-        "当前用户": list(metrics.values()),
-        "平均值": [df[k].mean() for k in metrics.keys()]
-    }).set_index("指标")
+    # 创建数据
+    metric_names = list(metrics.keys())
+    current_values = list(metrics.values())
+    avg_values = [df[k].mean() for k in metrics.keys()]
 
-    # 使用Streamlit的bar_chart直接渲染
-    # 注意：Streamlit的bar_chart会自动处理颜色，但我们可以通过自定义配置优化
-    # 由于Streamlit原生限制，无法完全自定义柱子颜色，但保证基本功能可用
-    st.bar_chart(chart_data, height=350, use_container_width=True)
+    # 使用matplotlib绘制自定义柱状图，满足设计规范：
+    # - 当前用户: 蓝色 #1976D2
+    # - 平均值: 灰色 #E0E0E0
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+
+    # 设置柱状图宽度和位置
+    bar_width = 0.35
+    index = range(len(metric_names))
+
+    # 绘制两组数据
+    bars1 = ax.bar([i - bar_width/2 for i in index], current_values, bar_width,
+                   label='当前用户', color='#1976D2', zorder=2)
+    bars2 = ax.bar([i + bar_width/2 for i in index], avg_values, bar_width,
+                   label='平均值', color='#E0E0E0', zorder=2)
+
+    # 自定义样式
+    ax.set_ylabel('数值', fontsize=12, color='#86909C')
+    ax.set_xticks(index)
+    ax.set_xticklabels(metric_names, rotation=30, ha='right', fontsize=10, color='#4E5969')
+    ax.legend(loc='upper right', fontsize=11)
+    ax.grid(axis='y', linestyle='--', color='#F0F0F0', alpha=0.8, zorder=1)
+    ax.set_facecolor('white')
+    fig.set_facecolor('white')
+
+    # 调整布局防止标签被截断
+    plt.tight_layout()
+
+    # 在streamlit中展示
+    st.pyplot(fig, use_container_width=True)
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)

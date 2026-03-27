@@ -97,12 +97,34 @@ if selected_user is None:
     st.info("👋 请从侧边栏搜索并选择用户开始分析")
     st.stop()
 
-# 获取当前用户数据
-user_data = df[df["联系电话"] == selected_user].iloc[0]
+try:
+    # 获取当前用户数据
+    user_data = df[df["联系电话"] == selected_user].iloc[0]
 
     # 主标题
     st.markdown("<h1 style='font-size: 24px; font-weight: 700; color: #1D2129; margin-bottom: 8px;'>🧠 AI数据治理与投诉用户画像分析</h1>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-size: 14px; color: #86909C; margin-bottom: 24px;'>当前分析用户: <strong style='color: #1D2129;'>{selected_user}</strong></div>", unsafe_allow_html=True)
+
+    # 当前用户信息 + 收藏按钮
+    col_info, col_fav = st.columns([4, 1])
+    with col_info:
+        st.markdown(f"<div style='font-size: 14px; color: #86909C; margin-bottom: 24px;'>当前分析用户: <strong style='color: #1D2129;'>{selected_user}</strong></div>", unsafe_allow_html=True)
+    with col_fav:
+        # 初始化收藏列表
+        if 'favorite_users' not in st.session_state:
+            st.session_state['favorite_users'] = []
+
+        # 检查是否已收藏
+        is_favorited = str(selected_user) in st.session_state['favorite_users']
+
+        if is_favorited:
+            if st.button("⭐ 已收藏", use_container_width=True, key="unfavorite_button"):
+                st.session_state['favorite_users'].remove(str(selected_user))
+                st.experimental_rerun()
+        else:
+            if st.button("⭐ 收藏", use_container_width=True, key="favorite_button"):
+                if str(selected_user) not in st.session_state['favorite_users']:
+                    st.session_state['favorite_users'].append(str(selected_user))
+                    st.experimental_rerun()
 
     # 1. 渲染风险警示条
     render_risk_banner(user_data)
