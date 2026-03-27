@@ -1,0 +1,758 @@
+/* =====================================
+ * 电信AI数据治理系统 - 基础样式表
+ * 遵循 UI设计系统 v1.0 规范
+ * ===================================== */
+
+/* =====================================
+ * 1. 色彩变量定义
+ * ===================================== */
+:root {
+  /* 主色调 - 电信蓝体系 */
+  --color-primary-dark: #0F51B8;
+  --color-primary: #1976D2;
+  --color-primary-light: #64B5F6;
+  --color-primary-extra-light: #E3F2FD;
+  --color-primary-ultra-light: #FAFCFE;
+  --color-primary-darkest: #0D47A1;
+
+  /* 风险等级色彩 */
+  --color-risk-critical-bg: #FFEBEE;
+  --color-risk-critical-text: #B71C1C;
+  --color-risk-critical-border: #FFCDD2;
+  --color-risk-warning-bg: #FFF3E0;
+  --color-risk-warning-text: #E65100;
+  --color-risk-warning-border: #FFE0B2;
+  --color-risk-watch-bg: #FFFDE7;
+  --color-risk-watch-text: #F57F17;
+  --color-risk-watch-border: #FFF59D;
+  --color-risk-normal-bg: #E8F5E9;
+  --color-risk-normal-text: #2E7D32;
+  --color-risk-normal-border: #C8E6C9;
+
+  /* 功能色 */
+  --color-success: #4CAF50;
+  --color-warning: #FF9800;
+  --color-error: #F44336;
+  --color-link: #1976D2;
+  --color-link-hover: #0D47A1;
+
+  /* 中性色体系 */
+  --color-bg-page: #F5F7FA;
+  --color-bg-card: #FFFFFF;
+  --color-bg-block: #FAFBFC;
+  --color-border-divider: #E5E6EB;
+  --color-border-light: #F0F0F0;
+  --color-text-title: #1D2129;
+  --color-text-block-title: #272E3B;
+  --color-text-body: #4E5969;
+  --color-text-secondary: #86909C;
+  --color-text-placeholder: #C9CDD4;
+  --color-mask: rgba(0, 0, 0, 0.45);
+
+  /* 阴影 */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-card-emphasize: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  /* 圆角 */
+  --radius-small: 8px;
+  --radius-normal: 12px;
+  --radius-tag: 20px;
+
+  /* 间距单位 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+}
+
+/* =====================================
+ * 2. 基础重置与全局样式
+ * ===================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg-page);
+  color: var(--color-text-body);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =====================================
+ * 3. 排版样式
+ * ===================================== */
+
+/* 超大标题 - 32px */
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text-title);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* 大标题 - 24px */
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-text-title);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* 区块标题 - 18px */
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text-block-title);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+/* 子标题 - 16px */
+h4 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text-block-title);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+/* 正文大 - 15px */
+.text-large {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-body);
+}
+
+/* 正文常规 - 14px */
+p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-body);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* 辅助文字 - 13px */
+.text-secondary {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* 小提示 - 12px */
+.text-small {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* 超小文字 - 11px */
+.text-xs {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-placeholder);
+}
+
+/* 链接样式 */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+/* 强调文字 */
+strong {
+  font-weight: 600;
+  color: var(--color-text-title);
+}
+
+/* =====================================
+ * 4. 通用组件 - 卡片
+ * ===================================== */
+
+/* 普通卡片 */
+.card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  border: none;
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 强调卡片 - 用于核心指标 */
+.card-emphasize {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  border: none;
+  box-shadow: var(--shadow-card-emphasize);
+  padding: 20px;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* AI区块卡片 */
+.card-ai {
+  background-color: var(--color-primary-ultra-light);
+  border: 1px solid var(--color-primary-extra-light);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 卡片标题 */
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-block-title);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 卡片内容 */
+.card-content {
+  /* 内容容器，保持间距 */
+}
+
+/* =====================================
+ * 5. 通用组件 - 按钮
+ * ===================================== */
+
+/* 基础按钮样式 */
+.btn {
+  border: none;
+  border-radius: var(--radius-small);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+/* 主按钮 */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-darkest);
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+
+/* 次按钮 */
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-primary-extra-light);
+}
+
+/* 文字按钮 */
+.btn-text {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: none;
+}
+
+.btn-text:hover:not(:disabled) {
+  background-color: var(--color-primary-extra-light);
+}
+
+/* 按钮尺寸 */
+.btn-large {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+}
+
+.btn-medium {
+  height: 40px;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.btn-small {
+  height: 32px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+/* 按钮状态 */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 块级按钮 */
+.btn-block {
+  width: 100%;
+}
+
+/* =====================================
+ * 6. 通用组件 - 标签
+ * ===================================== */
+
+/* 标签容器 */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+/* 基础标签样式 */
+.tag {
+  display: inline-block;
+  background-color: var(--color-bg-block);
+  color: var(--color-text-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 6px 16px;
+  border-radius: var(--radius-tag);
+}
+
+/* 高危标签 */
+.tag-critical {
+  background-color: var(--color-risk-critical-bg);
+  color: var(--color-risk-critical-text);
+}
+
+/* 中危标签 */
+.tag-warning {
+  background-color: var(--color-risk-warning-bg);
+  color: var(--color-risk-warning-text);
+}
+
+/* 关注标签 */
+.tag-watch {
+  background-color: var(--color-risk-watch-bg);
+  color: var(--color-risk-watch-text);
+}
+
+/* 正常标签 */
+.tag-normal {
+  background-color: var(--color-risk-normal-bg);
+  color: var(--color-risk-normal-text);
+}
+
+/* 中性标签 */
+.tag-neutral {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-body);
+}
+
+/* =====================================
+ * 7. 组件 - 风险警示条
+ * ===================================== */
+
+.risk-alert {
+  height: 48px;
+  border-radius: var(--radius-small);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-sm);
+}
+
+.risk-alert-critical {
+  background-color: var(--color-risk-critical-bg);
+  color: var(--color-risk-critical-text);
+}
+
+.risk-alert-warning {
+  background-color: var(--color-risk-warning-bg);
+  color: var(--color-risk-warning-text);
+}
+
+.risk-alert-watch {
+  background-color: var(--color-risk-watch-bg);
+  color: var(--color-risk-watch-text);
+}
+
+.risk-alert-normal {
+  background-color: var(--color-risk-normal-bg);
+  color: var(--color-risk-normal-text);
+}
+
+/* =====================================
+ * 8. 组件 - 锚点导航
+ * ===================================== */
+
+.anchor-nav {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card);
+  padding: 12px 16px;
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.anchor-item {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-body);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.anchor-item:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.anchor-item.active {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-bottom-color: var(--color-primary);
+}
+
+/* =====================================
+ * 9. 组件 - 指标卡片
+ * ===================================== */
+
+/* 整体统计概览指标卡片 */
+.metric-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  text-align: center;
+}
+
+.metric-name {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-title);
+}
+
+/* 核心指标卡片（更大更突出） */
+.metric-card-emphasize {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card-emphasize);
+  padding: 20px;
+  text-align: center;
+}
+
+.metric-card-emphasize .metric-name {
+  font-size: 14px;
+}
+
+.metric-card-emphasize .metric-value {
+  font-size: 28px;
+}
+
+.metric-delta {
+  font-size: 13px;
+  margin-top: var(--spacing-sm);
+}
+
+/* 差值颜色规则 */
+.metric-delta-bad {
+  color: var(--color-error);
+}
+
+.metric-delta-good {
+  color: var(--color-success);
+}
+
+.metric-delta-neutral {
+  color: var(--color-text-secondary);
+}
+
+/* =====================================
+ * 10. 组件 - 业务信息网格
+ * ===================================== */
+
+.biz-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.biz-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.biz-info-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.biz-info-value {
+  font-size: 15px;
+  color: var(--color-text-title);
+  font-weight: 500;
+}
+
+/* =====================================
+ * 11. 响应式布局断点
+ * ===================================== */
+
+/* 大屏桌面 >= 1920px */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1888px;
+    margin: 0 auto;
+  }
+}
+
+/* 普通桌面 1200px - 1919px - 保持默认 */
+
+/* 平板 768px - 1199px */
+@media (max-width: 1199px) {
+  .stats-overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .core-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 手机 < 768px */
+@media (max-width: 767px) {
+  .stats-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .core-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .biz-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 双列布局切换 */
+@media (min-width: 1200px) {
+  .two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* AI双列布局 */
+@media (min-width: 992px) {
+  .ai-two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* 统计概览网格 - 5列 */
+@media (min-width: 1200px) {
+  .stats-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-md);
+  }
+}
+
+/* 核心指标网格 - 4列 */
+@media (min-width: 1200px) {
+  .core-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-md);
+  }
+}
+
+/* =====================================
+ * 12. Streamlit 样式覆盖
+ * ===================================== */
+
+/* 覆盖Streamlit默认背景 */
+.main .block-container {
+  padding-top: var(--spacing-md);
+  padding-bottom: var(--spacing-xl);
+}
+
+/* 让Streamlit metric符合我们的设计规范 */
+[data-testid="stMetric"] {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  margin: 0;
+}
+
+[data-testid="stMetricLabel"] {
+  font-size: 13px !important;
+  color: var(--color-text-secondary) !important;
+  font-weight: 400 !important;
+}
+
+[data-testid="stMetricValue"] {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: var(--color-text-title) !important;
+}
+
+/* 强调版metric */
+.metric-emphasize [data-testid="stMetric"] {
+  box-shadow: var(--shadow-card-emphasize);
+  padding: 20px;
+}
+
+.metric-emphasize [data-testid="stMetricValue"] {
+  font-size: 28px !important;
+}
+
+/* 侧边栏样式优化 */
+[data-testid="stSidebar"] {
+  background-color: var(--color-bg-card);
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdown"] {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+/* 按钮样式覆盖 */
+button[kind="primary"] {
+  background-color: var(--color-primary) !important;
+}
+
+button[kind="primary"]:hover:not(:disabled) {
+  background-color: var(--color-primary-darkest) !important;
+}
+
+/* 图表容器 */
+.stChart {
+  background-color: var(--color-bg-card);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-normal);
+}
+
+/* 折叠面板 */
+[data-testid="stExpander"] {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-card);
+  border: none;
+}
+
+/* =====================================
+ * 13. 状态样式
+ * ===================================== */
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  color: var(--color-text-secondary);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.empty-state-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-body);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-desc {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 加载状态 */
+.loading-spinner {
+  color: var(--color-primary);
+}
+
+/* 错误状态 */
+.error-state {
+  background-color: var(--color-risk-critical-bg);
+  color: var(--color-risk-critical-text);
+  border-radius: var(--radius-small);
+  padding: var(--spacing-md);
+}
+
+/* 警告状态 */
+.warning-state {
+  background-color: var(--color-risk-watch-bg);
+  color: var(--color-risk-watch-text);
+  border-radius: var(--radius-small);
+  padding: var(--spacing-md);
+}
+
+/* 成功状态 */
+.success-state {
+  background-color: var(--color-risk-normal-bg);
+  color: var(--color-risk-normal-text);
+  border-radius: var(--radius-small);
+  padding: var(--spacing-md);
+}
+
+/* =====================================
+ * 文档结束
+ * ===================================== */
