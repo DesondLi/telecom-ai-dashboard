@@ -8,6 +8,7 @@
 
 import streamlit as st
 import pandas as pd
+import os
 
 # 导入组件和工具函数
 from components import (
@@ -21,6 +22,18 @@ from components import (
     render_expandable_sections
 )
 from utils.data import load_enhanced_data, generate_mock_data
+
+# 支持环境变量配置（用于 Streamlit Cloud 部署）
+DATA_FILE_PATH = os.environ.get('DATA_FILE_PATH', '投诉业务_特征与标签宽表_增强版.xlsx')
+
+# 如果本地有 config.py，覆盖环境变量配置（方便本地开发）
+try:
+    import config
+    if hasattr(config, 'DATA_FILE_PATH'):
+        DATA_FILE_PATH = config.DATA_FILE_PATH
+except ImportError:
+    # 没有本地 config.py，使用环境变量（部署环境）
+    pass
 
 # 页面配置
 st.set_page_config(
@@ -39,7 +52,6 @@ def load_css(css_path):
     st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
 
 # 加载基础样式表
-import os
 css_path = os.path.join(os.path.dirname(__file__), 'static/style.css')
 try:
     load_css(css_path)
@@ -67,7 +79,7 @@ data_source = "增强版宽表(推荐)"
 
 # 先加载数据 - 用户选择需要完整数据后才能渲染
 if data_source == "增强版宽表(推荐)":
-    df = load_enhanced_data("投诉业务_特征与标签宽表_增强版.xlsx")
+    df = load_enhanced_data(DATA_FILE_PATH)
     if df is None:
         df = generate_mock_data(500)
 else:
@@ -101,13 +113,13 @@ try:
     # 获取当前用户数据
     user_data = df[df["联系电话"] == selected_user].iloc[0]
 
-    # 主标题
-    st.markdown("<h1 style='font-size: 24px; font-weight: 700; color: #1D2129; margin-bottom: 8px;'>🧠 AI数据治理与投诉用户画像分析</h1>", unsafe_allow_html=True)
+    # 主标题 - 浅色背景深色文字
+    st.markdown("<h1 style='font-family: \"Space Grotesk\", sans-serif; font-size: 28px; font-weight: 700; color: #0F172A; margin-bottom: 8px; letter-spacing: -0.01em;'>🧠 AI数据治理与投诉用户画像分析</h1>", unsafe_allow_html=True)
 
     # 当前用户信息 + 收藏按钮
     col_info, col_fav = st.columns([4, 1])
     with col_info:
-        st.markdown(f"<div style='font-size: 14px; color: #86909C; margin-bottom: 24px;'>当前分析用户: <strong style='color: #1D2129;'>{selected_user}</strong></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size: 14px; color: #64748B; margin-bottom: 24px;'>当前分析用户: <strong style='color: #0F172A;'>{selected_user}</strong></div>", unsafe_allow_html=True)
     with col_fav:
         # 初始化收藏列表
         if 'favorite_users' not in st.session_state:
@@ -119,12 +131,12 @@ try:
         if is_favorited:
             if st.button("⭐ 已收藏", use_container_width=True, key="unfavorite_button"):
                 st.session_state['favorite_users'].remove(str(selected_user))
-                st.experimental_rerun()
+                st.rerun()
         else:
             if st.button("⭐ 收藏", use_container_width=True, key="favorite_button"):
                 if str(selected_user) not in st.session_state['favorite_users']:
                     st.session_state['favorite_users'].append(str(selected_user))
-                    st.experimental_rerun()
+                    st.rerun()
 
     # 1. 渲染风险警示条
     render_risk_banner(user_data)
@@ -135,36 +147,18 @@ try:
     # 3. 渲染核心指标
     render_core_metrics(user_data, df)
 
-    # 4. 双列布局：左侧图表 + 右侧标签业务信息
+    # 4. 布局：左侧图表 + 右侧特征标签（各半宽），业务信息在下全宽
     col_chart, col_tags = st.columns([1, 1])
 
     with col_chart:
-        # 包装在卡片容器中
-        st.markdown("""
-        <div style="
-            background-color: #FFFFFF;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            margin-bottom: 24px;
-        ">
-        """, unsafe_allow_html=True)
         render_chart_section(user_data, df)
-        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_tags:
-        # 包装在卡片容器中
-        st.markdown("""
-        <div style="
-            background-color: #FFFFFF;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            margin-bottom: 24px;
-        ">
-        """, unsafe_allow_html=True)
         render_tags_section(user_data)
-        st.markdown("</div>", unsafe_allow_html=True)
+
+    # 业务信息单独一行，全宽横向排列
+    from components.tags_section import render_biz_info_fullwidth
+    render_biz_info_fullwidth(user_data)
 
     # 5. 渲染AI分析区域
     render_ai_analysis(user_data)
