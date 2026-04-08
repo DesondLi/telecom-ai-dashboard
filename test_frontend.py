@@ -197,13 +197,19 @@ with tab1:
         直接调用 telecom-cli 核心处理函数
         不走 subprocess，避免环境问题
         """
-        # 导入核心处理函数（路径已经在启动时添加到 sys.path）
+        # 动态导入，绕过包机制问题
+        import importlib.util
+        module_path = os.path.join(telecom_dir, 'src/core/data_processor.py')
         try:
-            from src.core.data_processor import clean_and_merge, ProcessingResult
-        except ModuleNotFoundError as e:
+            spec = importlib.util.spec_from_file_location("data_processor", module_path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            clean_and_merge = module.clean_and_merge
+            ProcessingResult = module.ProcessingResult
+        except Exception as e:
             return {
                 "errcode": 99,
-                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
+                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n模块路径: {module_path}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
             }
 
         complaint_path = str(Path(DATA_DIR) / complaint_filename)
@@ -416,13 +422,19 @@ with tab2:
         """
         直接调用 OneID 构建核心处理函数
         """
-        # 导入核心处理函数（路径已经在启动时添加到 sys.path）
+        # 动态导入，绕过包机制问题
+        import importlib.util
+        module_path = os.path.join(telecom_dir, 'src/core/oneid_builder.py')
         try:
-            from src.core.oneid_builder import build_oneid, BuildOneIDResult
-        except ModuleNotFoundError as e:
+            spec = importlib.util.spec_from_file_location("oneid_builder", module_path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            build_oneid = module.build_oneid
+            BuildOneIDResult = module.BuildOneIDResult
+        except Exception as e:
             return {
                 "errcode": 99,
-                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
+                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n模块路径: {module_path}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
             }
 
         input_paths = [str(Path(DATA_DIR) / f) for f in input_files]
