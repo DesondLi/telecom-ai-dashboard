@@ -63,6 +63,23 @@ def get_client():
 
 client = get_client()
 
+# 检查 telecom_agent_demo 是否存在
+telecom_dir = os.path.join(os.path.dirname(__file__), 'telecom_agent_demo')
+if not os.path.exists(telecom_dir):
+    st.error("""
+# ❌ 缺少核心代码目录
+
+**telecom_agent_demo** 目录不存在，请确保它已经被推送到 GitHub 仓库。
+
+这个目录包含核心数据处理代码（`src/core/clean_and_merge` 和 `src/core/oneid_builder`），没有它应用无法执行数据处理。
+
+解决方法：
+1. 将本地的 `telecom_agent_demo` 目录添加到 Git
+2. 提交并推送到 GitHub
+3. Streamlit Cloud 会自动重新部署
+    """)
+    st.stop()
+
 # 扫描线下表数据文件夹
 data_path = Path(DATA_DIR)
 # 确保目录存在（云端部署时自动创建）
@@ -175,11 +192,22 @@ with tab1:
         """
         # 添加 telecom_agent_demo 到 Python 路径
         telecom_dir = os.path.join(os.path.dirname(__file__), 'telecom_agent_demo')
+        if not os.path.exists(telecom_dir):
+            return {
+                "errcode": 99,
+                "errmsg": "❌ telecom_agent_demo 目录不存在！核心处理代码未部署。\n\n请确保 telecom_agent_demo 目录已推送到 GitHub 仓库。"
+            }
         if telecom_dir not in sys.path:
             sys.path.insert(0, telecom_dir)
 
         # 导入核心处理函数
-        from src.core.data_processor import clean_and_merge, ProcessingResult
+        try:
+            from src.core.data_processor import clean_and_merge, ProcessingResult
+        except ModuleNotFoundError as e:
+            return {
+                "errcode": 99,
+                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
+            }
 
         complaint_path = str(Path(DATA_DIR) / complaint_filename)
         oao_path = str(Path(DATA_DIR) / oao_filename)
@@ -393,11 +421,22 @@ with tab2:
         """
         # 添加 telecom_agent_demo 到 Python 路径
         telecom_dir = os.path.join(os.path.dirname(__file__), 'telecom_agent_demo')
+        if not os.path.exists(telecom_dir):
+            return {
+                "errcode": 99,
+                "errmsg": "❌ telecom_agent_demo 目录不存在！核心处理代码未部署。\n\n请确保 telecom_agent_demo 目录已推送到 GitHub 仓库。"
+            }
         if telecom_dir not in sys.path:
             sys.path.insert(0, telecom_dir)
 
         # 导入核心处理函数
-        from src.core.oneid_builder import build_oneid, BuildOneIDResult
+        try:
+            from src.core.oneid_builder import build_oneid, BuildOneIDResult
+        except ModuleNotFoundError as e:
+            return {
+                "errcode": 99,
+                "errmsg": f"❌ 找不到核心处理模块: {str(e)}\n\n请确保 telecom_agent_demo 目录已完整推送到 GitHub 仓库。"
+            }
 
         input_paths = [str(Path(DATA_DIR) / f) for f in input_files]
 
