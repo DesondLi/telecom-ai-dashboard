@@ -79,7 +79,35 @@ else:
 # ========== Tab 1: clean_and_merge ==========
 with tab1:
     # 侧边栏 - 文件选择
-    st.sidebar.header("📁 文件选择 (合并)")
+    st.sidebar.header("📁 已有文件 (合并)")
+
+    # 文件上传
+    st.sidebar.header("📤 上传新文件")
+    uploaded_complaint = st.sidebar.file_uploader("上传客诉表文件", type=['xlsx', 'xls'])
+    if uploaded_complaint is not None:
+        # 保存上传的文件到 DATA_DIR
+        complaint_path = data_path / uploaded_complaint.name
+        with open(complaint_path, "wb") as f:
+            f.write(uploaded_complaint.getbuffer())
+        st.sidebar.success(f"✅ 已保存: {uploaded_complaint.name}")
+        # 刷新文件列表
+        excel_files = list(data_path.glob("*.xlsx")) + list(data_path.glob("*.xls"))
+        excel_files = [f for f in excel_files if not f.name.startswith('~$')]
+        excel_names = [f.name for f in excel_files]
+
+    uploaded_oao = st.sidebar.file_uploader("上传OAO表文件", type=['xlsx', 'xls'])
+    if uploaded_oao is not None:
+        # 保存上传的文件到 DATA_DIR
+        oao_path = data_path / uploaded_oao.name
+        with open(oao_path, "wb") as f:
+            f.write(uploaded_oao.getbuffer())
+        st.sidebar.success(f"✅ 已保存: {uploaded_oao.name}")
+        # 刷新文件列表
+        excel_files = list(data_path.glob("*.xlsx")) + list(data_path.glob("*.xls"))
+        excel_files = [f for f in excel_files if not f.name.startswith('~$')]
+        excel_names = [f.name for f in excel_files]
+
+    st.sidebar.markdown("---")
 
     complaint_file = st.sidebar.selectbox(
         "选择客诉表文件",
@@ -313,7 +341,28 @@ with tab1:
 # ========== Tab 2: build_oneid ==========
 with tab2:
     # 侧边栏 - 文件选择
-    st.sidebar.header("📁 文件选择 (OneID)")
+    st.sidebar.header("📤 上传新文件 (OneID)")
+
+    # 多文件上传
+    uploaded_files = st.sidebar.file_uploader(
+        "上传多个Excel文件",
+        type=['xlsx', 'xls'],
+        accept_multiple_files=True
+    )
+    if uploaded_files:
+        for uploaded in uploaded_files:
+            # 保存上传的文件到 DATA_DIR
+            file_path = data_path / uploaded.name
+            with open(file_path, "wb") as f:
+                f.write(uploaded.getbuffer())
+            st.sidebar.success(f"✅ 已保存: {uploaded.name}")
+        # 刷新文件列表
+        excel_files = list(data_path.glob("*.xlsx")) + list(data_path.glob("*.xls"))
+        excel_files = [f for f in excel_files if not f.name.startswith('~$')]
+        excel_names = [f.name for f in excel_files]
+
+    st.sidebar.markdown("---")
+    st.sidebar.header("📁 已有文件 (OneID)")
 
     selected_files = st.sidebar.multiselect(
         "选择参与OneID构建的文件（多选）",
