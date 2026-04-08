@@ -73,40 +73,6 @@ streamlit run test_frontend.py --server.address=0.0.0.0 --server.port=8501
 
 启动后，同一局域网内的其他人可以通过 `http://<你的IP>:8501` 访问。
 
-## 🌐 公网访问方案
-
-### 方案一：ngrok 内网穿透（快速测试）
-
-1. 下载安装 [ngrok](https://ngrok.com/)
-2. 启动 streamlit：
-```bash
-streamlit run test_frontend.py --server.address=0.0.0.0 --server.port=8501
-```
-3. 新开终端运行 ngrok：
-```bash
-ngrok http 8501
-```
-4. ngrok 会给你一个类似 `https://xxx-xxx-xxx.ngrok.io` 的公网 URL，分享给他人即可。
-
-### 方案二：Streamlit Cloud（推荐演示）
-
-**一键部署到公网，任何人都可以通过互联网访问：**
-
-1. 将整个项目推送到 GitHub 公开仓库
-2. 访问 [share.streamlit.io](https://share.streamlit.io/)，使用 GitHub 账号登录
-3. 点击 "New app"
-4. 选择：
-   - Repository: `你的用户名/telecom-ai-dashboard`
-   - Branch: `master`
-   - Main file path: `test_frontend.py`
-5. 点击 "Advanced settings"
-6. 在 "Secrets" 添加环境变量：
-   - `AIHUBMIX_API_KEY` → 你的 AIHubMix API Key
-   - （可选）`AIHUBMIX_BASE_URL` → API 地址，默认 `https://aihubmix.com/v1`
-   - （可选）`AIHUBMIX_MODEL` → 模型名称，默认 `gpt-4o-mini`
-7. 点击 "Deploy"
-8. 部署完成后获得公开 URL，分享给他人即可访问
-
 **云端使用说明：**
 - 在侧边栏 "📤 上传新文件" 上传你的 Excel 文件
 - 上传完成后文件自动保存，可以在下拉框选择
