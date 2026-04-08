@@ -1,0 +1,30 @@
+{
+  "description": "build_oneid 命令参数模型\n\n供 LLM 调用 Skill 时使用，定义了必填和可选参数。",
+  "properties": {
+    "input_files": {
+      "description": "需要参与OneID构建的Excel文件路径列表，从线下表数据目录中选取",
+      "items": {
+        "type": "string"
+      },
+      "title": "Input Files",
+      "type": "array"
+    },
+    "confidence_level": {
+      "default": "high",
+      "description": "置信度级别，控制匹配规则：high(仅流水号)/medium(+客户标识)/low(+手机号)，可选值: high, medium, low",
+      "title": "Confidence Level",
+      "type": "string"
+    },
+    "output_dir": {
+      "default": "./output",
+      "description": "输出目录路径，默认为 ./output",
+      "title": "Output Dir",
+      "type": "string"
+    }
+  },
+  "required": [
+    "input_files"
+  ],
+  "title": "BuildOneIDParams",
+  "type": "object"
+}

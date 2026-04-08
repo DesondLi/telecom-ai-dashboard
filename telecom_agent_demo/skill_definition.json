@@ -1,0 +1,40 @@
+{
+  "description": "clean_and_merge 命令参数模型\n\n供 LLM 调用 Skill 时使用，定义了必填和可选参数。",
+  "properties": {
+    "complaint_file": {
+      "description": "客诉表 Excel 文件的本地绝对路径",
+      "title": "Complaint File",
+      "type": "string"
+    },
+    "oao_file": {
+      "description": "OAO清单 Excel 文件的本地绝对路径",
+      "title": "Oao File",
+      "type": "string"
+    },
+    "join_key": {
+      "description": "用于关联两张表的主键列名，必须在两张表中都存在",
+      "title": "Join Key",
+      "type": "string"
+    },
+    "output_dir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "./output",
+      "description": "输出目录路径，默认为 ./output",
+      "title": "Output Dir"
+    }
+  },
+  "required": [
+    "complaint_file",
+    "oao_file",
+    "join_key"
+  ],
+  "title": "CleanAndMergeParams",
+  "type": "object"
+}
