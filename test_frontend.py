@@ -91,16 +91,18 @@ else:
 # 验证 src 包可以导入
 try:
     import src
-except ModuleNotFoundError:
+except ModuleNotFoundError as e:
     # 调试信息：显示实际路径结构
-    import glob
+    src_path = os.path.join(telecom_dir, 'src')
     debug_info = f"""
 Debug info:
 - Current file: {__file__}
 - telecom_dir: {telecom_dir}
 - telecom_dir exists: {os.path.exists(telecom_dir)}
 - Files in telecom_dir: {os.listdir(telecom_dir)}
-- Files in telecom_dir/src: {os.listdir(os.path.join(telecom_dir, 'src'))} if exists
+- src directory exists: {os.path.exists(src_path)}
+- Files in src: {os.listdir(src_path) if os.path.exists(src_path) else 'DOES NOT EXIST'}
+- sys.path[0]: {sys.path[0] if sys.path else 'empty'}
 - sys.path: {sys.path[:5]}
 """
     st.error(f"❌ 无法导入 src 包\n\n{debug_info}")
