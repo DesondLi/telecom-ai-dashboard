@@ -80,33 +80,12 @@ if not os.path.exists(telecom_dir):
     """)
     st.stop()
 
-# 添加 telecom_agent_demo 到 Python 路径（提前添加，确保导入成功）
+# 添加 telecom_agent_demo 和 src 到 Python 路径（两种方式都添加，确保导入成功）
+src_dir = os.path.join(telecom_dir, 'src')
 if telecom_dir not in sys.path:
     sys.path.insert(0, telecom_dir)
-else:
-    # 如果已经存在，移动到最前面确保优先导入
-    sys.path.remove(telecom_dir)
-    sys.path.insert(0, telecom_dir)
-
-# 验证 src 包可以导入
-try:
-    import src
-except ModuleNotFoundError as e:
-    # 调试信息：显示实际路径结构
-    src_path = os.path.join(telecom_dir, 'src')
-    debug_info = f"""
-Debug info:
-- Current file: {__file__}
-- telecom_dir: {telecom_dir}
-- telecom_dir exists: {os.path.exists(telecom_dir)}
-- Files in telecom_dir: {os.listdir(telecom_dir)}
-- src directory exists: {os.path.exists(src_path)}
-- Files in src: {os.listdir(src_path) if os.path.exists(src_path) else 'DOES NOT EXIST'}
-- sys.path[0]: {sys.path[0] if sys.path else 'empty'}
-- sys.path: {sys.path[:5]}
-"""
-    st.error(f"❌ 无法导入 src 包\n\n{debug_info}")
-    st.stop()
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 # 扫描线下表数据文件夹
 data_path = Path(DATA_DIR)
