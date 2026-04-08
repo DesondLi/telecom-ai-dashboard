@@ -65,14 +65,16 @@ client = get_client()
 
 # 扫描线下表数据文件夹
 data_path = Path(DATA_DIR)
-if data_path.exists():
+# 确保目录存在（云端部署时自动创建）
+data_path.mkdir(exist_ok=True, parents=True)
+if data_path.exists() and any(data_path.iterdir()):
     excel_files = list(data_path.glob("*.xlsx")) + list(data_path.glob("*.xls"))
     excel_files = [f for f in excel_files if not f.name.startswith('~$')]
     excel_names = [f.name for f in excel_files]
 else:
     excel_files = []
     excel_names = []
-    st.sidebar.error(f"❌ 找不到 {DATA_DIR} 目录")
+    st.sidebar.info(f"ℹ️ {DATA_DIR} 目录已创建，当前没有数据文件")
 
 # ========== Tab 1: clean_and_merge ==========
 with tab1:
