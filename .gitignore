@@ -35,8 +35,9 @@ env/
 # Project specific
 # 敏感配置文件 - 包含 API Key
 config.py
-# Excel 数据文件 - 业务数据不上传公开仓库
+# Excel 数据文件 - 业务数据不上传公开仓库，除了部署用的演示数据文件
 *.xlsx
+!投诉业务_特征与标签宽表_增强版.xlsx
 *.xls
 *.csv
 # 输出目录
