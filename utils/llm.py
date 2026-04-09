@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-"""LLM分析功能模块 - 使用AIHubMix Gemini API"""
+"""LLM分析功能模块 - 使用AIHubMix 推理时代 DeepSeek API"""
 
 import os
 import streamlit as st
 from openai import OpenAI
 
-# AIHubMix API 配置 - 从环境变量读取，默认值保留向后兼容
+# AIHubMix API 配置 - 从环境变量读取，推理时代 deepseek-v3.2-fast
 AIHUB_API_KEY = os.getenv("AIHUB_API_KEY", "sk-B3dOLsy6g9wA6wLJ8177A66aEb4348Ed843847Dc1b0eCb05")
 AIHUB_BASE_URL = "https://aihubmix.com/v1"
 
 # 创建 OpenAI 客户端
 client = OpenAI(api_key=AIHUB_API_KEY, base_url=AIHUB_BASE_URL)
 
-# LLM 模型配置
+# LLM 模型配置 - 推理时代 deepseek-v3.2-fast
 LLM_MODEL = "coding-minimax-m2.7-free"
 
 def call_llm(prompt, system_prompt=None):
@@ -26,13 +26,18 @@ def call_llm(prompt, system_prompt=None):
         response = client.chat.completions.create(
             model=LLM_MODEL,
             messages=messages,
-            temperature=0.7,
-            max_tokens=2000,
-            timeout=60
+            temperature=0.7
         )
-        return response.choices[0].message.content
+        content = response.choices[0].message.content
+        # 移除DeepSeek返回的<think>...</think>思考过程标签
+        if content and '<think>' in content:
+            import re
+            content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL)
+            content = content.strip()
+        return content
     except Exception as e:
-        st.error(f"API调用失败: {str(e)}")
+        # API调用失败时，保存错误信息到session_state持久化显示
+        st.session_state['llm_error'] = str(e)
         return None
 
 def explain_complaint_llm(row):

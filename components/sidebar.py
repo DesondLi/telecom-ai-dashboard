@@ -7,15 +7,23 @@ import pandas as pd
 def render_sidebar(df):
     """
     渲染重构后的侧边栏
-    返回: (selected_user, df) - 选中的用户和数据框
+    返回: (selected_user, data_source) - 选中的用户和数据源
     """
     with st.sidebar:
-        # 品牌区域
+        # 品牌区域 - 超紧凑设计，去掉大图标节省空间
         st.markdown("""
-        <div style="text-align: center; padding: 8px 0 16px 0; border-bottom: 1px solid #E5E6EB; margin-bottom: 16px;">
-            <img src="https://img.icons8.com/fluency/96/artificial-intelligence.png" width="64" style="margin-bottom: 8px;">
-            <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #1D2129;">🧠 电信AI数据治理</h2>
-            <p style="margin: 4px 0 0 0; font-size: 12px; color: #86909C;">用户投诉智能分析系统</p>
+        <div style="
+            padding: 4px 8px 12px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 12px;
+        ">
+            <div style="display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+                <span style="font-size: 24px; line-height: 1;">🧠</span>
+                <div>
+                    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.01em; line-height: 1.3;">电信AI数据治理</h2>
+                    <p style="margin: 2px 0 0 0; font-size: 11px; color: rgba(255, 255, 255, 0.75); font-weight: 500; line-height: 1.2;">用户投诉智能分析</p>
+                </div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -30,7 +38,7 @@ def render_sidebar(df):
         )
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 用户筛选区域 (P1-01)
+        # 用户筛选区域
         st.markdown('<div style="margin-bottom: 20px;">', unsafe_allow_html=True)
         st.markdown("### 🎯 用户筛选")
 
@@ -67,7 +75,7 @@ def render_sidebar(df):
                 for key in ["user_search", "selected_risk", "selected_customer_level", "complaint_range"]:
                     if key in st.session_state:
                         del st.session_state[key]
-                st.experimental_rerun()
+                st.rerun()
 
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -86,10 +94,11 @@ def render_sidebar(df):
         filtered_df = df.copy()
 
         # 应用风险等级筛选
-        # 需要根据风险等级判断逻辑过滤
-        if selected_risk != "全部":
-            # 根据现有数据中的风险相关特征判断
-            # 假设风险等级由多个特征综合判断，这里简化处理
+        # 如果数据中已有风险等级列，直接使用，否则使用 heuristic 推断
+        if "风险等级" in df.columns and selected_risk != "全部":
+            filtered_df = filtered_df[filtered_df["风险等级"] == selected_risk]
+        elif selected_risk != "全部":
+            # 根据现有数据中的风险相关特征推断
             if selected_risk == "高危":
                 filtered_df = filtered_df[filtered_df["越级次数"] >= 1]
             elif selected_risk == "中危":
@@ -135,17 +144,17 @@ def render_sidebar(df):
             )
         else:
             st.markdown("""
-            <div style="text-align: center; padding: 20px 10px; background: #F5F7FA; border-radius: 8px;">
+            <div style="text-align: center; padding: 20px 10px; background: #F8FAFC; border-radius: 8px;">
                 <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
-                <div style="font-size: 14px; color: #86909C;">当前筛选条件下没有匹配的用户</div>
-                <div style="font-size: 12px; color: #C9CDD4; margin-top: 4px;">请尝试调整筛选条件</div>
+                <div style="font-size: 14px; color: #64748B; margin-bottom: 4px;">当前筛选条件下没有匹配的用户</div>
+                <div style="font-size: 12px; color: #94A3B8; margin-top: 4px;">请尝试调整筛选条件</div>
             </div>
             """, unsafe_allow_html=True)
             selected_user = None
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 收藏功能 (P1-06)
+        # 收藏功能
         st.markdown('<div style="margin-bottom: 20px;">', unsafe_allow_html=True)
         st.markdown("### ⭐ 收藏用户")
 
@@ -165,10 +174,10 @@ def render_sidebar(df):
                 with col_del:
                     if st.button("🗑️", key=f"del_{fav_user}", use_container_width=True):
                         st.session_state['favorite_users'].remove(fav_user)
-                        st.experimental_rerun()
+                        st.rerun()
         else:
             st.markdown("""
-            <div style="font-size: 13px; color: #86909C; text-align: center; padding: 10px;">
+            <div style="font-size: 13px; color: rgba(255, 255, 255, 0.6); text-align: center; padding: 10px;">
                 点击用户详情页的星标可收藏常用用户
             </div>
             """, unsafe_allow_html=True)
@@ -178,7 +187,7 @@ def render_sidebar(df):
         # 添加帮助信息区域 (折叠)
         with st.expander("❓ 使用帮助", expanded=False):
             st.markdown("""
-            <div style="font-size: 13px; line-height: 1.6; color: #4E5969;">
+            <div style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.8);">
             <p><strong>功能说明:</strong></p>
             <ul>
                 <li><b>数据源选择:</b> 选择增强版宽表或模拟数据</li>
@@ -186,7 +195,7 @@ def render_sidebar(df):
                 <li><b>搜索用户:</b> 输入关键词快速定位目标用户</li>
                 <li><b>收藏用户:</b> 在详情页点击星标收藏</li>
                 <li><b>风险警示:</b> 顶部条颜色表示风险等级</li>
-                <li><b>AI分析:</b> 自动生成诊断和用户画像</li>
+                <li><b>AI分析:</b> 点击按钮自动生成诊断和用户画像</li>
             </ul>
             </div>
             """, unsafe_allow_html=True)
